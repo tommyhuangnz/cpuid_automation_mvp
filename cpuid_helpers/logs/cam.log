@@ -1,0 +1,86 @@
+2024-12-23T14:14:35.7919791+08:00  INFO ThreadId(01) common\logging\src\lib.rs:175: Logging started for pid 47840 (rust-cam@69.0.0; scratchpad)    
+2024-12-23T14:14:35.7931719+08:00  INFO ThreadId(01) cam-core\src\jsutil\core_client.rs:424: Starting CAM Core    
+2024-12-23T14:14:36.0267307+08:00  WARN ThreadId(01) nzxt-device\src\device\usb.rs:1086: Device 0#KrakenZ3 opened with shared access, PDO name: `\Device\00000091`    
+2024-12-23T14:14:36.0700064+08:00  WARN ThreadId(01) nzxt-device\src\device\usb.rs:1086: Device 1#N7Z690 opened with shared access, PDO name: `\Device\00000080`    
+2024-12-23T14:14:43.2476727+08:00  WARN ThreadId(01) nzxt-device\src\device\superio.rs:165: N7Z690 detect failed: DriverServiceStart: Command failed with Failed to install driver CamDriverMb: Failed to reopen driver CamDriverMb: failed to open CamDriverMb device: A device which does not exist was specified. (os error 433)    
+2024-12-23T14:14:43.2576578+08:00  WARN ThreadId(01) nzxt-device\src\device\usb.rs:1086: Device 2#RGBFanControllerV2 opened with shared access, PDO name: `\Device\0000007f`    
+2024-12-23T14:14:43.2671972+08:00  WARN ThreadId(01) nzxt-device\src\device\device_model.rs:429: Error starting device thread for device 3#KeyboardV2: Could not open device file for writing    
+2024-12-23T14:14:43.2833798+08:00  INFO ThreadId(01) C:\actions-runner\_work\cam-core\cam-core\nzxt-device\src\api.rs:241: Init device list:
+	KrakenZ3: 0#KrakenZ3
+	N7Z690: 1#N7Z690
+	RGBFanControllerV2: 2#RGBFanControllerV2
+	KeyboardV2: 3#KeyboardV2    
+2024-12-23T14:14:43.370171+08:00  INFO device_event_thread_fn nzxt-device\src\api.rs:938: Device initialized:
+temp_id: 0#KrakenZ3
+unique_id: Some("kraken_z3-1572904-859328781-808530999")
+lighting channels:
+	all: [Union(20)]
+	channel 1: [Accessory(StripV2(10)), Accessory(StripV2(10))]
+cooling channels:
+	pump(idx: 255): Available(Integrated)
+	fan(idx: 0): Available(Pins(4))    
+2024-12-23T14:14:43.4127034+08:00  WARN DevClass lift-elite-wireless crates\device-classes\lift-elite-wireless-class\src\device.rs:746: Failed to get initial info error=IoHandleCtor
+
+Caused by these errors (recent errors listed first):
+  1: Failed opening the write handle
+  2: The process cannot access the file because it is being used by another process. (os error 32)
+
+2024-12-23T14:14:43.4167831+08:00  WARN DevClass lift-elite-wireless crates\device-classes\lift-elite-wireless-class\src\device.rs:746: Failed to get initial info error=IoHandleCtor
+
+Caused by these errors (recent errors listed first):
+  1: Failed opening the write handle
+  2: The process cannot access the file because it is being used by another process. (os error 32)
+
+2024-12-23T14:14:43.4341352+08:00  INFO            DevClassFramework arrival{device_id=0 arrival.device_type=KrakenEliteV2}: crates\device-framework\src\device_framework.rs:169: adding device initial_status=Initializing
+2024-12-23T14:14:43.4347747+08:00  WARN                  DevClass V2 Device task{device_id=0 type=KrakenEliteV2}: crates\resources\resource-usb\src\hid.rs:213: Device NZXT Kraken Elite V2 (pid: 0x3012 - usage_page: 0xFF00) opened with shared access, PDO name: \Device\00000099
+2024-12-23T14:14:43.4421467+08:00  INFO            DevClassFramework arrival{device_id=1 arrival.device_type=ControlHub}: crates\device-framework\src\device_framework.rs:169: adding device initial_status=Initializing
+2024-12-23T14:14:43.4423063+08:00  WARN                  DevClass V2 Device task{device_id=1 type=ControlHub}: crates\resources\resource-usb\src\hid.rs:213: Device NZXT Control Hub (pid: 0x2022 - usage_page: 0xFF00) opened with shared access, PDO name: \Device\00000090
+2024-12-23T14:14:43.6743908+08:00  INFO            DevClassFramework arrival{device_id=2 arrival.device_type=CPU}: crates\device-framework\src\device_framework.rs:169: adding device initial_status=Ready
+2024-12-23T14:14:43.6755225+08:00  INFO         tokio-runtime-worker log_sysinfo: cam-core\src\monitoring.rs:104: OS Version: 10.0.22631
+2024-12-23T14:14:43.6770198+08:00  INFO            DevClassFramework arrival{device_id=3 arrival.device_type=GPU}: crates\device-framework\src\device_framework.rs:169: adding device initial_status=Ready
+2024-12-23T14:14:43.6773333+08:00  INFO         tokio-runtime-worker log_sysinfo: cam-core\src\monitoring.rs:122: GPUs: 
+    - NVIDIA GeForce RTX 4060 - Driver Version: 32.0.15.6614
+2024-12-23T14:14:43.6775887+08:00  INFO         tokio-runtime-worker log_sysinfo: cam-core\src\monitoring.rs:132: CPUs: 
+    - Intel Core i7 12700T
+2024-12-23T14:14:43.6777142+08:00  INFO         tokio-runtime-worker log_sysinfo: cam-core\src\monitoring.rs:135: Mainboard: NZXT N7 Z690 version: (1.25 11/16/2021) Alder Lake Z690
+2024-12-23T14:14:43.9039178+08:00  INFO       device_event_thread_fn nzxt-device\src\api.rs:938: Device initialized:
+temp_id: 1#N7Z690
+unique_id: Some("n7_z690-235061327-2880158853-1603217710")
+lighting channels:
+	all: [Union(1)]
+	channel 1: []
+	channel 2: []
+	channel 3: []
+	channel 4: [Component(Motherboard12VPlaceholder)]    
+2024-12-23T14:14:44.1981611+08:00  INFO            DevClassFramework device_status{device_id=1}: crates\device-framework\src\device_framework.rs:121: status changed from=Initializing to=Ready
+2024-12-23T14:14:44.291197+08:00 ERROR                  DevClass V2 Device task{device_id=0 type=KrakenEliteV2}: crates\device-classes\v2-class\src\fwk_capabilities\lcd.rs:223: Could not find WinUSB endpoint, LCD capabilities will not be functional error=Windows
+
+Caused by this error:
+  1: The operation completed successfully. (0x00000000)
+
+2024-12-23T14:14:44.2913731+08:00  INFO            DevClassFramework device_status{device_id=0}: crates\device-framework\src\device_framework.rs:121: status changed from=Initializing to=Ready
+2024-12-23T14:14:47.9919608+08:00  INFO                  DevClass V2 wait_for_device_exit_reason{id=1}: crates\device-class-utils\src\lib.rs:346: Device exited reason=Disconnected
+2024-12-23T14:14:47.9938482+08:00  INFO                  DevClass V2 wait_for_device_exit_reason{id=0}: crates\device-class-utils\src\lib.rs:346: Device exited reason=Disconnected
+2024-12-23T14:14:49.3079708+08:00  INFO         tokio-runtime-worker cam-core\src\monitoring.rs:57: Resource monitoring loop stopped
+2024-12-23T14:14:50.6302141+08:00  INFO              helper_watchdog cam-helper-client\src\lib.rs:188: released with exit code: Some(0)
+2024-12-23T14:14:50.6317244+08:00  WARN         tokio-runtime-worker cam-helper-client\src\lib.rs:77: camcore stop_service failed error=StopWorkerHelperError
+
+Caused by this error:
+  1: IpcNotInitialized
+
+2024-12-23T14:14:50.6321862+08:00  WARN         tokio-runtime-worker cam-helper-client\src\lib.rs:77: camcore stop_service failed error=StopWorkerHelperError
+
+Caused by this error:
+  1: IpcNotInitialized
+
+2024-12-23T14:14:50.6324832+08:00  WARN         tokio-runtime-worker cam-helper-client\src\lib.rs:80: elevation_helper stop_service failed error=RequestError
+
+Caused by this error:
+  1: IpcNotInitialized
+
+2024-12-23T14:14:50.6327908+08:00  WARN         tokio-runtime-worker cam-helper-client\src\lib.rs:80: elevation_helper stop_service failed error=RequestError
+
+Caused by this error:
+  1: IpcNotInitialized
+
+2024-12-23T14:14:50.6329028+08:00  INFO         tokio-runtime-worker common\logging\src\lib.rs:180: Logging stopped for pid 47840    
