@@ -17,9 +17,10 @@ jobs:
           echo "Current working directory:"
           pwd
 
+    # cd "C:\Users\tommy\Desktop\workspace\cpuid_automation_mvp"
+
       - name: Change directory to cpuid_automation_mvp and run pnpm install
         run: |
-          cd "C:\Users\tommy\Desktop\workspace\cpuid_automation_mvp"
           pnpm install
           echo "pnpm install @nzxt/cam-core@69.0.0"
           pnpm install @nzxt/cam-core@69.0.0
