@@ -21,4 +21,4 @@ jobs:
         run: |
           cd "C:\Users\tommy\Desktop\workspace\cpuid_automation_mvp"
           pnpm install
-        shell: pwsh  # Use PowerShell shell for Windows environment
+        shell: powershell  # Use PowerShell shell for Windows environment
