@@ -1,0 +1,24 @@
+name: CPUID MVP Pipeline
+
+# Trigger the workflow manually
+on:
+  workflow_dispatch:
+
+jobs:
+  install:
+    runs-on: [self-hosted, windows]  # Specify a self-hosted Windows runner
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Check out the repository to the runner
+
+      - name: Print current working directory
+        run: |
+          echo "Current working directory:"
+          pwd
+
+      - name: Change directory to cpuid_automation_mvp and run pnpm install
+        run: |
+          cd "C:\Users\tommy\Desktop\workspace\cpuid_automation_mvp"
+          pnpm install
+        shell: pwsh  # Use PowerShell shell for Windows environment
