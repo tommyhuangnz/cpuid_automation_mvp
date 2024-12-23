@@ -22,3 +22,11 @@ jobs:
           cd "C:\Users\tommy\Desktop\workspace\cpuid_automation_mvp"
           pnpm install
         shell: powershell  # Use PowerShell shell for Windows environment
+    
+      - name:  get cur temp
+        run: |
+          echo "Current working directory:"
+          pwd
+          echo "Getting temps"
+          ts-node ./cpuid_helpers/validate_cpuid_cpu_temps.ts
+        shell: powershell  # Use PowerShell shell for Windows environment
