@@ -21,6 +21,7 @@ jobs:
 
       - name: Change directory to cpuid_automation_mvp and run pnpm install
         run: |
+          cd "C:\Users\tommy\Desktop\workspace\cpuid_automation_mvp"
           pnpm install
           echo "pnpm install @nzxt/cam-core@69.0.0"
           pnpm install @nzxt/cam-core@69.0.0
@@ -30,6 +31,7 @@ jobs:
     
       - name:  get cur temp
         run: |
+          cd "C:\Users\tommy\Desktop\workspace\cpuid_automation_mvp"
           echo "Current working directory:"
           pwd
           echo "Getting temps"
