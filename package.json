@@ -38,7 +38,10 @@
   },
   "dependencies": {
     "@cucumber/cucumber": "^11.1.1",
-    "@nzxt/cam-core": "^69.0.0"
+    "@nzxt/cam-core": "^69.0.0",
+    "axios": "^1.7.9",
+    "dotenv": "^10.0.0",
+    "request": "^2.88.2"
   },
   "include": [
     "**/*.ts"

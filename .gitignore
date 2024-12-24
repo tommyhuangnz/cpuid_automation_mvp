@@ -3,3 +3,4 @@ pnpm-lock.yaml
 node_modules
 logs
 cpuid_helpers/logs
+.env
