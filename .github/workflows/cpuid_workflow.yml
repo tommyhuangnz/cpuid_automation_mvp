@@ -37,3 +37,20 @@ jobs:
           echo "Getting temps"
           ts-node ./cpuid_helpers/validate_cpuid_cpu_temps.ts
         shell: powershell  # Use PowerShell shell for Windows environment
+
+  test:
+    runs-on: [self-hosted, windows]  # Specify a self-hosted Windows runner
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3  # Check out the repository to the runner
+
+      - name: install new version of cam-core
+        run: |
+          cd "C:\Users\tommy\Desktop\workspace\cpuid_automation_mvp"
+          echo "pnpm install @nzxt/cam-core@69.1.0"
+          pnpm install @nzxt/cam-core@69.1.0
+          echo "pnpm list @nzxt/cam-core"
+          pnpm list @nzxt/cam-core
+          ts-node ./cpuid_helpers/validate_cpuid_cpu_temps.ts
+        shell: powershell

@@ -82,14 +82,16 @@ function isWithinAcceptanceRate(temp1: number, temp2: number): boolean {
 }
 
 async function main() {
-  const tempCalcScriptPath = path.resolve(__dirname, './get_cpu_avg_temp.ts')
+  // console.log('Current working directory:', process.cwd());
+  // console.log("PATH: ")
+
   ensureJsonFileDoesNotExist(jsonFilePath)
 
   // Step 1: Install cam-core version 1.
   // await installCamCore(camCoreVersion1)
 
   // Step 2: Read the temperature from the JSON file for the first version
-  await runTempScript(tempCalcScriptPath)
+  await runTempScript('./cpuid_helpers/get_cpu_avg_temp.ts')
   // const temp1 = readTemperatureFromJSON(jsonFilePath, camCoreVersion1)
   // if (temp1 === null) {
   //   console.error('Failed to read temperature from the JSON file for the first version.')

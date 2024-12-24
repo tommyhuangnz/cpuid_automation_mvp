@@ -1,5 +1,5 @@
 import { CoreClient, LogLevel } from '@nzxt/cam-core'
-// import { version as camCoreVersion } from '@nzxt/cam-core/package.json' // Import package version
+import { version as camCoreVersion } from '@nzxt/cam-core/package.json' // Import package version
 import * as fs from 'fs/promises' // For file operations
 import { findDevice } from './helpers/find-device-fwk2'
 import { filterCapabilities, unwrap } from './helpers/helpers'
@@ -69,7 +69,7 @@ async function main() {
     console.log(`8-second average CPU-package temperature: ${avgTemperature.toFixed(2)}°C`)
 
     // Save average and CAM-Core version to the JSON file
-    await saveTemperatureToJSON(avgTemperature, filePath, "69.0.0")
+    await saveTemperatureToJSON(avgTemperature, filePath, camCoreVersion)
 
     // Clean shutdown
     await fwk2.shutdown()
