@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  install:
+  test:
     runs-on: [self-hosted, windows]  # Specify a self-hosted Windows runner
 
     steps:
@@ -16,8 +16,6 @@ jobs:
         run: |
           echo "Current working directory:"
           pwd
-
-    # cd "C:\Users\tommy\Desktop\workspace\cpuid_automation_mvp"
 
       - name: pnpm install
         run: |
@@ -34,13 +32,6 @@ jobs:
           }
         shell: powershell  # Use PowerShell shell for Windows environment
     
-  test:
-    runs-on: [self-hosted, windows]  # Specify a self-hosted Windows runner
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3  # Check out the repository to the runner
-      
       - name:  get cur temp cam-core@69.0.0
         run: |
           pnpm list cam-core
