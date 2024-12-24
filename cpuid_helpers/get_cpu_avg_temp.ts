@@ -66,7 +66,7 @@ async function main() {
 
     // Calculate average
     const avgTemperature = calculateAverage(cpuPackageTemperatures)
-    console.log(`8-second average CPU-package temperature: ${avgTemperature.toFixed(2)}°C`)
+    console.log(`3-second average CPU-package temperature: ${avgTemperature.toFixed(2)}°C`)
 
     // Save average and CAM-Core version to the JSON file
     await saveTemperatureToJSON(avgTemperature, filePath, camCoreVersion)
@@ -76,7 +76,7 @@ async function main() {
     await coreClient.shutdown()
     console.log('Program finished.')
     process.exit()
-  }, 8000) // End after 5 seconds
+  }, 3000) // End after 5 seconds
 }
 
 void main()
