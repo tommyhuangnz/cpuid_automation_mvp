@@ -32,6 +32,6 @@
     "yargs": "^17.7.2"
   },
   "dependencies": {
-    "@nzxt/cam-core": "^71.0.0"
+    "@nzxt/cam-core": "^69.1.0"
   }
 }

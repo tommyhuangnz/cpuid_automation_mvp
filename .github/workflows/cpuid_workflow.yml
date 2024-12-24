@@ -33,7 +33,7 @@ jobs:
           echo "Current working directory:"
           pwd
           echo "Getting temps"
-          ts-node ./cpuid_helpers/get_cpu_avg_temps.ts
+          ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
           echo "Print out ./cpuid_reading.json"
           (Get-Content -Path "./cpuid_reading.json" | ConvertFrom-Json) | Format-List
         shell: powershell  # Use PowerShell shell for Windows environment
@@ -46,20 +46,19 @@ jobs:
         uses: actions/checkout@v3  # Check out the repository to the runner
 
       - name: install new version of cam-core
-        run: |
-          cd "C:\Users\tommy\Desktop\workspace\cpuid_automation_mvp"
+        run: | 
           echo "pnpm install @nzxt/cam-core@69.1.0"
           pnpm install @nzxt/cam-core@69.1.0
           echo "pnpm list @nzxt/cam-core"
           pnpm list @nzxt/cam-core
-          ts-node ./cpuid_helpers/get_cpu_avg_temps.ts
+          ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
         shell: powershell
       
       - name:  get cur temp cam-core@69.1.0
         run: |
           echo "pwd"
           pwd
-          ts-node ./cpuid_helpers/get_cpu_avg_temps.ts
+          ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
           echo "Print out ./cpuid_reading.json"
           (Get-Content -Path "./cpuid_reading.json" | ConvertFrom-Json) | Format-List
         shell: powershell  # Use PowerShell shell for Windows environment
