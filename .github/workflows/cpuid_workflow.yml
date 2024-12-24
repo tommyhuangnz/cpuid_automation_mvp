@@ -3,6 +3,21 @@ name: CPUID MVP Pipeline
 # Trigger the workflow manually
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'The branch to run the automation on'
+        required: false
+        default: 'main'
+
+      old_version:
+        description: 'Old cam-core version (e.g., 69.0.0)'
+        required: true
+        default: '69.0.0'
+      new_version:
+        description: 'New cam-core version (e.g., 69.1.0)'
+        required: true
+        default: '69.1.0'
+
 
 jobs:
   test:
@@ -17,11 +32,11 @@ jobs:
           echo "Current working directory:"
           pwd
 
-      - name: pnpm install
+      - name: pnpm install old cam-core version
         run: |
           pnpm install
-          echo "pnpm install @nzxt/cam-core@69.0.0"
-          pnpm install @nzxt/cam-core@69.0.0
+          echo "pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}"
+          pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}
           echo "pnpm list @nzxt/cam-core"
           pnpm list @nzxt/cam-core
           if (Test-Path -Path "./cpuid_reading.json") {
@@ -32,7 +47,7 @@ jobs:
           }
         shell: powershell  # Use PowerShell shell for Windows environment
     
-      - name:  get cur temp cam-core@69.0.0
+      - name:  Get average temperature for old cam-core version
         run: |
           pnpm list cam-core
           echo "Current working directory:"
@@ -43,10 +58,10 @@ jobs:
           (Get-Content -Path "./cpuid_reading.json" | ConvertFrom-Json) | Format-List
         shell: powershell  # Use PowerShell shell for Windows environment
 
-      - name: install new version of cam-core@69.1.0
+      - name: Install new cam-core version
         run: | 
-          echo "pnpm install @nzxt/cam-core@69.1.0"
-          pnpm install @nzxt/cam-core@69.1.0
+          echo "pnpm install @nzxt/cam-core@${{ github.event.inputs.new_version }}"
+          pnpm install @nzxt/cam-core@${{ github.event.inputs.new_version }}
           echo "pnpm list @nzxt/cam-core"
           pnpm list @nzxt/cam-core
           ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
