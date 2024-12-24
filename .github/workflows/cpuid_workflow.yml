@@ -40,6 +40,7 @@ jobs:
 
   test:
     runs-on: [self-hosted, windows]  # Specify a self-hosted Windows runner
+    needs: install
 
     steps:
       - name: Checkout repository
@@ -47,6 +48,12 @@ jobs:
 
       - name: install new version of cam-core
         run: | 
+          if (Test-Path -Path "./cpuid_reading.json") {
+              Remove-Item -Path "./cpuid_reading.json"
+              Write-Host "File removed."
+          } else {
+              Write-Host "File does not exist."
+          }
           echo "pnpm install @nzxt/cam-core@69.1.0"
           pnpm install @nzxt/cam-core@69.1.0
           echo "pnpm list @nzxt/cam-core"
