@@ -1,128 +1,60 @@
-import { When, setDefaultTimeout } from '@cucumber/cucumber'
-import { exec, spawn } from 'child_process'
-import * as path from 'path'
-import { promisify } from 'util'
-// import { strict as assert } from 'assert'
-// const { Given, When, Then } = require('@cucumber/cucumber')
-// const assert = require('assert')
-console.log('pATH: : ')
-const pnpmPath = path.join('C:Users\tommyDesktopworkspacecerberuspackagese2e-test-v2', 'node_modules', '.bin', 'pnpm')
-// Promisify exec for async/await support
-const execPromise = promisify(exec)
-///
+import { Given, When, Then } from '@cucumber/cucumber';
+import * as fs from 'fs/promises';
 
-// Function to run shell commands
-function runCommand(command: string, timeout: number = 30000): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const process = exec(command, (error, stdout, stderr) => {
-      if (error) {
-        reject(`Error: ${error.message}`)
-        return
-      }
-      resolve(stdout || stderr)
-    })
+let cpuTemperatures: { [version: string]: { cpu_temperature: number; timestamp: string } } = {};
 
-    const timer = setTimeout(() => {
-      process.kill() // Kill the process if it takes too long
-      reject(new Error('Command timed out'))
-    }, timeout)
-
-    process.on('close', () => {
-      clearTimeout(timer) // Clear the timeout if the process exits normally
-    })
-  })
-}
-///
-
-var number1 = 0
-setDefaultTimeout(40000)
-const runPowerShellCommand = () => {
-  const psScript = `
-  Push-Location -Path "C:\\Users\\tommy\\Desktop\\workspace\\test_sep_pnpm";
-  pnpm install;
-  Pop-Location
-  `
-  const encodedCommand = Buffer.from(psScript, 'utf16le').toString('base64')
-  const psProcess = spawn('powershell.exe', ['-NoProfile', '-EncodedCommand', encodedCommand], {
-    stdio: 'inherit', // Directs child process I/O to the parent
-    env: process.env, // Inherit environment variables
-    shell: true, // Ensures the PowerShell shell is used
-  })
-
-  psProcess.on('close', code => {
-    if (code === 0) {
-      console.log('Command executed successfully.')
-    } else {
-      console.error(`Command exited with code ${code}.`)
-    }
-  })
-
-  psProcess.on('error', error => {
-    console.error(`Failed to start process: ${error.message}`)
-  })
-}
-
-const get_temps = () => {
-  const psScript = `
-  Push-Location -Path "C:\\Users\\tommy\\Desktop\\workspace\\test_sep_pnpm";
-  ts-node ./cpuid_helpers/validate_cupid_cpu_temps.ts;
-  Pop-Location
-  `
-  const encodedCommand = Buffer.from(psScript, 'utf16le').toString('base64')
-  const psProcess = spawn('powershell.exe', ['-NoProfile', '-EncodedCommand', encodedCommand], {
-    stdio: 'inherit', // Directs child process I/O to the parent
-    env: process.env, // Inherit environment variables
-    shell: true, // Ensures the PowerShell shell is used
-  })
-
-  psProcess.on('close', code => {
-    if (code === 0) {
-      console.log('Command executed successfully.')
-    } else {
-      console.error(`Command exited with code ${code}.`)
-    }
-  })
-
-  psProcess.on('error', error => {
-    console.error(`Failed to start process: ${error.message}`)
-  })
-}
-
-// runPowerShellCommand()
-
-When('I have installed pnpm packages in the cpuid_test environment', async function () {
+Given('the JSON file {string} exists', async (fileName: string) => {
   try {
-    runPowerShellCommand()
-  } catch (error) {
-    console.error('Error during pnpm install:', error)
-    throw error
+    const rawData = await fs.readFile(fileName, 'utf-8');
+    cpuTemperatures = JSON.parse(rawData);
+    if (!Object.keys(cpuTemperatures).length) {
+      throw new Error('File is empty or has no valid data.');
+    }
+  } catch (err) {
+    throw new Error(`Failed to load or parse the JSON file...`);
   }
-})
+});
 
-// const module_path = path.resolve(__dirname, '../cpuid_helpers/validate_cpuid_cpu_temps')
-// const { installCamCore, runTempScript } = require(module_path)
+When('I compare the cpu_temperature values between versions', async () => {
+  const versions = Object.keys(cpuTemperatures);
+  if (versions.length <= 1) {
+    throw new Error('Not enough versions to compare.');
+  }
 
-// When('install cam-core ver {string}', async function (ver: string) {
-//   console.log(`Starting installation of cam-core version ${ver}...`)
-//   try {
-//     await installCamCore(ver)
-//     // if (stderr) {
-//     //   console.error(`stderr: ${stderr}`)
-//     // }
+  for (let i = 1; i < versions.length; i++) {
+    const currentVersion = versions[i];
+    const previousVersion = versions[i - 1];
 
-//     // console.log(`stdout: ${result}`)
-//   } catch (error) {
-//     console.error(`Error installing package: ${error}`)
-//     console.error(error.stack)
-//   }
-// })
+    const currentTemp = cpuTemperatures[currentVersion].cpu_temperature;
+    const previousTemp = cpuTemperatures[previousVersion].cpu_temperature;
 
-When('Compute CPU Temperature data for 5 seconds', async () => {
-  // const tempCalcScriptPath = '../../cpuid_helpers/get_cpu_avg_temp.ts'
-  console.log('Getting CPU Avg Temps...')
-  // await get_cpu_avg_temps()
-  // await get_temps()
-  console.log('FINISHED!!')
-})
+    const difference = Math.abs(currentTemp - previousTemp);
+    const errorRate = (difference / previousTemp) * 100;
 
-// Then('the acceptance rate is below 5s', () => {})
+    console.log(`Comparing ${previousVersion} (${previousTemp}°C) and ${currentVersion} (${currentTemp}°C)`);
+    console.log(`Difference: ${difference.toFixed(2)}°C, Error Rate: ${errorRate.toFixed(2)}%`);
+  }
+});
+
+Then('the temperature difference should be within {int}%', async (threshold: number) => {
+  const versions = Object.keys(cpuTemperatures);
+
+  for (let i = 1; i < versions.length; i++) {
+    const currentVersion = versions[i];
+    const previousVersion = versions[i - 1];
+
+    const currentTemp = cpuTemperatures[currentVersion].cpu_temperature;
+    const previousTemp = cpuTemperatures[previousVersion].cpu_temperature;
+    console.log(`cam-core@${previousVersion}: ${previousTemp}°C`)
+    console.log(`cam-core@${currentVersion}: ${currentTemp}°C`)
+
+    const difference = Math.abs(currentTemp - previousTemp);
+    const errorRate = (difference / previousTemp) * 100;
+
+    if (errorRate > threshold) {
+      throw new Error(
+        `Error rate between ${previousVersion} and ${currentVersion} exceeds ${threshold}%: ${errorRate.toFixed(2)}%`
+      );
+    }
+  }
+});
