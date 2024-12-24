@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  install:
+  test:
     runs-on: [self-hosted, windows]  # Specify a self-hosted Windows runner
 
     steps:
@@ -38,15 +38,7 @@ jobs:
           (Get-Content -Path "./cpuid_reading.json" | ConvertFrom-Json) | Format-List
         shell: powershell  # Use PowerShell shell for Windows environment
 
-  test:
-    runs-on: [self-hosted, windows]  # Specify a self-hosted Windows runner
-    needs: install
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3  # Check out the repository to the runner
-
-      - name: install new version of cam-core
+      - name: install new version of cam-core@69.1.0
         run: | 
           if (Test-Path -Path "./cpuid_reading.json") {
               Remove-Item -Path "./cpuid_reading.json"
@@ -61,7 +53,7 @@ jobs:
           ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
         shell: powershell
       
-      - name:  get cur temp cam-core@69.1.0
+      - name:  get cur temp of cam-core@69.1.0
         run: |
           echo "pwd"
           pwd
