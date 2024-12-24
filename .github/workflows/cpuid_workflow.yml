@@ -69,3 +69,8 @@ jobs:
           echo "Print out ./cpuid_reading.json"
           (Get-Content -Path "./cpuid_reading.json" | ConvertFrom-Json) | Format-List
         shell: powershell  # Use PowerShell shell for Windows environment
+      
+      - name: cross validate CPUID values
+        run: |
+          pnpm test-cpuid
+        shell: powershell
