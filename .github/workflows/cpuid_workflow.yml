@@ -1,3 +1,91 @@
+# name: CPUID MVP Pipeline
+
+# # Trigger the workflow manually
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       branch:
+#         description: 'The branch to run the automation on'
+#         required: false
+#         default: 'main'
+
+#       old_version:
+#         description: 'Old cam-core version (e.g., 69.0.0)'
+#         required: true
+#         default: '69.0.0'
+#       new_version:
+#         description: 'New cam-core version (e.g., 69.1.0)'
+#         required: true
+#         default: '69.1.0'
+
+
+# jobs:
+#   test:
+#     runs-on: [self-hosted, windows]  # Specify a self-hosted Windows runner
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3  # Check out the repository to the runner
+
+#       - name: Print current working directory
+#         run: |
+#           echo "Current working directory:"
+#           pwd
+#           echo 'pnpm list'
+#           pnpm list
+
+#       - name: pnpm install old cam-core version
+#         run: |
+#           echo 'pnpm install'
+#           pnpm install
+#           echo 'pnpm list'
+#           pnpm list
+#           echo "pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}"
+#           pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}
+#           echo "pnpm list @nzxt/cam-core"
+#           pnpm list @nzxt/cam-core
+#           if (Test-Path -Path "./cpuid_reading.json") {
+#               Remove-Item -Path "./cpuid_reading.json"
+#               Write-Host "File removed."
+#           } else {
+#               Write-Host "File does not exist."
+#           }
+#         shell: powershell  # Use PowerShell shell for Windows environment
+    
+#       - name:  Get average temperature for old cam-core version
+#         run: |
+#           pnpm list cam-core
+#           echo "Current working directory:"
+#           pwd
+#           echo "Getting temps"
+#           ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
+#           echo "Print out ./cpuid_reading.json"
+#           (Get-Content -Path "./cpuid_reading.json" | ConvertFrom-Json) | Format-List
+#         shell: powershell  # Use PowerShell shell for Windows environment
+
+#       - name: Install new cam-core version
+#         run: | 
+#           echo "pnpm install @nzxt/cam-core@${{ github.event.inputs.new_version }}"
+#           pnpm install @nzxt/cam-core@${{ github.event.inputs.new_version }}
+#           echo "pnpm list @nzxt/cam-core"
+#           pnpm list @nzxt/cam-core
+#           ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
+#         shell: powershell
+      
+#       - name:  get cur temp of cam-core@69.1.0
+#         run: |
+#           echo "pwd"
+#           pwd
+#           ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
+#           echo "Print out ./cpuid_reading.json"
+#           (Get-Content -Path "./cpuid_reading.json" | ConvertFrom-Json) | Format-List
+#         shell: powershell  # Use PowerShell shell for Windows environment
+      
+#       - name: cross validate CPUID values
+#         run: |
+#           pnpm test-cpuid
+#         shell: powershell
+
 name: CPUID MVP Pipeline
 
 # Trigger the workflow manually
@@ -18,65 +106,75 @@ on:
         required: true
         default: '69.1.0'
 
-
 jobs:
-  test:
+  installation:
     runs-on: [self-hosted, windows]  # Specify a self-hosted Windows runner
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3  # Check out the repository to the runner
 
-      - name: Print current working directory
-        run: |
-          echo "Current working directory:"
-          pwd
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules/.pnpm  # Path to pnpm cache
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
-      - name: pnpm install old cam-core version
+      - name: Install dependencies for old cam-core version
         run: |
+          echo 'pnpm install'
           pnpm install
           echo "pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}"
           pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}
-          echo "pnpm list @nzxt/cam-core"
-          pnpm list @nzxt/cam-core
-          if (Test-Path -Path "./cpuid_reading.json") {
-              Remove-Item -Path "./cpuid_reading.json"
-              Write-Host "File removed."
-          } else {
-              Write-Host "File does not exist."
-          }
-        shell: powershell  # Use PowerShell shell for Windows environment
-    
-      - name:  Get average temperature for old cam-core version
+        shell: powershell
+
+  cpu-data-prep:
+    runs-on: [self-hosted, windows]  # Use the same self-hosted runner
+    needs: installation  # Ensure this runs after the installation job
+    steps:
+      - name: Restore pnpm dependencies cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules/.pnpm
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Get average temperature for old cam-core version
         run: |
-          pnpm list cam-core
-          echo "Current working directory:"
-          pwd
-          echo "Getting temps"
           ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
           echo "Print out ./cpuid_reading.json"
           (Get-Content -Path "./cpuid_reading.json" | ConvertFrom-Json) | Format-List
-        shell: powershell  # Use PowerShell shell for Windows environment
+        shell: powershell
 
       - name: Install new cam-core version
-        run: | 
+        run: |
           echo "pnpm install @nzxt/cam-core@${{ github.event.inputs.new_version }}"
           pnpm install @nzxt/cam-core@${{ github.event.inputs.new_version }}
-          echo "pnpm list @nzxt/cam-core"
-          pnpm list @nzxt/cam-core
-          ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
         shell: powershell
-      
-      - name:  get cur temp of cam-core@69.1.0
+
+      - name: Get current temperature for cam-core@69.1.0
         run: |
-          echo "pwd"
-          pwd
           ts-node ./cpuid_helpers/get_cpu_avg_temp.ts
           echo "Print out ./cpuid_reading.json"
           (Get-Content -Path "./cpuid_reading.json" | ConvertFrom-Json) | Format-List
-        shell: powershell  # Use PowerShell shell for Windows environment
-      
-      - name: cross validate CPUID values
+        shell: powershell
+
+  validation:
+    runs-on: [self-hosted, windows]  # Use the same self-hosted runner
+    needs: cpu-data-prep  # Ensure this runs after CPU data prep
+    steps:
+      - name: Restore pnpm dependencies cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules/.pnpm
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
+      - name: Cross-validate CPUID values
         run: |
           pnpm test-cpuid
         shell: powershell
