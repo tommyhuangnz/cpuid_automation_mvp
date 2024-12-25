@@ -1,13 +1,6 @@
 {
-  "name": "@nzxt/cam-core",
-  "version": "69.0.0",
-  "description": "",
-  "author": "CAM Team <support@nzxt.com>",
-  "main": "dist/index",
-  "typings": "dist/index",
-  "files": [
-    "dist"
-  ],
+  "name": "cpuid_validation",
+  "version": "1.0.0",
   "scripts": {
     "test-cpuid": "cucumber-js --require-module ts-node/register"
   },
