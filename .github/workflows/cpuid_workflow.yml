@@ -130,6 +130,15 @@ jobs:
           pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}
         shell: powershell
 
+      # Save the cache after installation
+      - name: Save pnpm dependencies cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules/.pnpm  # Path to pnpm cache
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
+
   cpu-data-prep:
     runs-on: [self-hosted, windows]  # Use the same self-hosted runner
     needs: installation  # Ensure this runs after the installation job
