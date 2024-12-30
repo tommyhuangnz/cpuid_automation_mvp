@@ -124,6 +124,8 @@ jobs:
 
       - name: Install dependencies for old cam-core version
         run: |
+          echo 'pnpm list'
+          pnpm list
           echo 'pnpm install'
           pnpm install
           echo "pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}"
@@ -132,9 +134,10 @@ jobs:
 
       # Save the cache after installation
       - name: Save pnpm dependencies cache
+        id: cache-nodemodules
         uses: actions/cache@v3
         with:
-          path: node_modules/.pnpm  # Path to pnpm cache
+          path: node_modules
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
@@ -175,10 +178,12 @@ jobs:
     runs-on: [self-hosted, windows]  # Use the same self-hosted runner
     needs: cpu-data-prep  # Ensure this runs after CPU data prep
     steps:
+    # Restore cache before installing dependencies
       - name: Restore pnpm dependencies cache
+        id: cache-nodemodules
         uses: actions/cache@v3
         with:
-          path: node_modules/.pnpm
+          path: node_modules
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
@@ -187,5 +192,7 @@ jobs:
         run: |
           echo 'git branch'
           git branch
+          echo 'pnpm list'
+          pnpm list
           pnpm test-cpuid
         shell: powershell
