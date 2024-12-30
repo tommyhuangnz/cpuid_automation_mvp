@@ -185,5 +185,7 @@ jobs:
 
       - name: Cross-validate CPUID values
         run: |
+          echo 'git branch'
+          git branch
           pnpm test-cpuid
         shell: powershell
