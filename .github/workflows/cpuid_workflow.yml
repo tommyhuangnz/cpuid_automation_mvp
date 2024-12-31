@@ -55,7 +55,7 @@ jobs:
       - name: Cache pnpm dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.pnpm-store
+          path: ~/node_modules/.pnpm
           key: pnpm-store-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
             pnpm-store-${{ github.ref }}-
@@ -73,7 +73,7 @@ jobs:
       - name: Restore pnpm cache
         uses: actions/cache@v3
         with:
-          path: ~/.pnpm-store
+          path: ~/node_modules/.pnpm
           key: pnpm-store-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
             pnpm-store-${{ github.ref }}-
@@ -116,7 +116,7 @@ jobs:
       - name: Restore pnpm cache
         uses: actions/cache@v3
         with:
-          path: ~/.pnpm-store
+          path: ~/node_modules/.pnpm
           key: pnpm-store-${{ github.ref }}-${{ github.sha }}
           restore-keys: |
             pnpm-store-${{ github.ref }}-
