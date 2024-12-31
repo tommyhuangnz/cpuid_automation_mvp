@@ -26,22 +26,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3  # Check out the repository to the runner
 
-      - name: Set up pnpm and install dependencies
-        uses: pnpm/action-setup@v2.4.1
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
         with:
-          version: 8.2.0
-          run_install: fasle  # Automatically runs `pnpm install`
+          version: 9
+          run_install: false
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_READ_TOKEN}}
 
-      - name: Use Node.js v16
-        uses: actions/setup-node@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v4
         with:
+          node-version: 20
+          cache: 'pnpm'
           always-auth: true
-          node-version: 16.x
           registry-url: https://registry.npmjs.org
           scope: "@nzxt"
-          cache: 'pnpm'
       
       - name: Echo pnpm list and version
         run: |
