@@ -31,6 +31,8 @@ jobs:
         with:
           version: 8.2.0
           run_install: true  # Automatically runs `pnpm install`
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_READ_TOKEN}}
 
       - name: Echo pnpm list and version
         run: |
