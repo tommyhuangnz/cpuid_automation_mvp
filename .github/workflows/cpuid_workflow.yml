@@ -33,6 +33,7 @@ jobs:
           node-version: 16.x
           registry-url: https://registry.npmjs.org
           scope: "@nzxt"
+          cache: 'pnpm'
       
       - name: Set up pnpm and install dependencies
         uses: pnpm/action-setup@v2.4.1
