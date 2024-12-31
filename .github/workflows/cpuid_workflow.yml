@@ -53,13 +53,10 @@ jobs:
         shell: powershell
       
       - name: Cache pnpm dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/node_modules/.pnpm
           key: pnpm-store-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            pnpm-store-${{ github.ref }}-
-            pnpm-store-
 
   cpu-data-prep:
     runs-on: [self-hosted, windows]  # Use the same self-hosted runner
@@ -71,13 +68,10 @@ jobs:
         shell: powershell
 
       - name: Restore pnpm cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/node_modules/.pnpm
           key: pnpm-store-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            pnpm-store-${{ github.ref }}-
-            pnpm-store-
   
       - name: Check pnpm env
         run: |
