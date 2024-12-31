@@ -26,14 +26,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3  # Check out the repository to the runner
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: true
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_READ_TOKEN}}
-
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
@@ -42,6 +34,14 @@ jobs:
           always-auth: true
           registry-url: https://registry.npmjs.org
           scope: "@nzxt"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_READ_TOKEN}}
       
       - name: Echo pnpm list and version
         run: |
