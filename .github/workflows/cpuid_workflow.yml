@@ -73,6 +73,22 @@ jobs:
           path: ~/node_modules/.pnpm
           key: pnpm-store-${{ github.ref }}-${{ github.sha }}
   
+      - name: Use Node.js v16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          always-auth: true
+          registry-url: https://registry.npmjs.org
+          scope: "@nzxt"
+  
+      - name: Use pnpm@8.2.0 and install dependencies
+        uses: pnpm/action-setup@v2.4.1
+        with:
+          version: 8.2.0
+          run_install: true
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_READ_TOKEN}}
+
       - name: Check pnpm env
         run: |
           echo 'pnpm list'
