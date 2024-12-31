@@ -33,15 +33,6 @@ jobs:
           node-version: 16.x
           registry-url: https://registry.npmjs.org
           scope: "@nzxt"
-
-      - name: Cache pnpm dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.pnpm-store
-          key: pnpm-store-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            pnpm-store-${{ github.ref }}-
-            pnpm-store-
       
       - name: Set up pnpm and install dependencies
         uses: pnpm/action-setup@v2.4.1
@@ -60,6 +51,15 @@ jobs:
           echo "pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}"
           pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}
         shell: powershell
+      
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-store-${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            pnpm-store-${{ github.ref }}-
+            pnpm-store-
 
   cpu-data-prep:
     runs-on: [self-hosted, windows]  # Use the same self-hosted runner
@@ -70,6 +70,15 @@ jobs:
           git branch
         shell: powershell
 
+      - name: Restore pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-store-${{ github.ref }}-${{ github.sha }}
+          restore-keys: |
+            pnpm-store-${{ github.ref }}-
+            pnpm-store-
+  
       - name: Check pnpm env
         run: |
           echo 'pnpm list'
@@ -98,14 +107,6 @@ jobs:
           (Get-Content -Path "./cpuid_reading.json" | ConvertFrom-Json) | Format-List
         shell: powershell
       
-      - name: Restore pnpm cache
-        uses: actions/cache@v3
-        with:
-          path: ~/.pnpm-store
-          key: pnpm-store-${{ github.ref }}-${{ github.sha }}
-          restore-keys: |
-            pnpm-store-${{ github.ref }}-
-            pnpm-store-
 
   validation:
     runs-on: [self-hosted, windows]  # Use the same self-hosted runner
