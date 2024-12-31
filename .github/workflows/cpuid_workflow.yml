@@ -42,6 +42,16 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_READ_TOKEN}}
       
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v4
+        id: node_modules
+        with:
+          path: |
+            **/node_modules
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
+
       - name: Echo pnpm list and version
         run: |
           echo 'pnpm list'
@@ -52,11 +62,7 @@ jobs:
           pnpm install @nzxt/cam-core@${{ github.event.inputs.old_version }}
         shell: powershell
       
-      - name: Cache pnpm dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/node_modules/.pnpm
-          key: pnpm-store-${{ github.ref }}-${{ github.sha }}
+      
 
   cpu-data-prep:
     runs-on: [self-hosted, windows]  # Use the same self-hosted runner
@@ -67,11 +73,15 @@ jobs:
           git branch
         shell: powershell
 
-      - name: Restore pnpm cache
+      - name: Cache pnpm dependencies
         uses: actions/cache@v4
+        id: node_modules
         with:
-          path: ~/node_modules/.pnpm
-          key: pnpm-store-${{ github.ref }}-${{ github.sha }}
+          path: |
+            **/node_modules
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
   
       - name: Use Node.js v16
         uses: actions/setup-node@v3
@@ -123,14 +133,15 @@ jobs:
     needs: cpu-data-prep  # Ensure this runs after CPU data prep
     steps:
 
-      - name: Restore pnpm cache
-        uses: actions/cache@v3
+      - name: Cache pnpm dependencies
+        uses: actions/cache@v4
+        id: node_modules
         with:
-          path: ~/node_modules/.pnpm
-          key: pnpm-store-${{ github.ref }}-${{ github.sha }}
+          path: |
+            **/node_modules
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            pnpm-store-${{ github.ref }}-
-            pnpm-store-
+            pnpm-store-${{ runner.os }}-
 
       - name: Cross-validate CPUID values
         run: |
