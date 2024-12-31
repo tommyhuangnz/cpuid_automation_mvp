@@ -26,6 +26,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3  # Check out the repository to the runner
 
+      - name: Use Node.js v16
+        uses: actions/setup-node@v3
+        with:
+          always-auth: true
+          node-version: 16.x
+          registry-url: https://registry.npmjs.org
+          scope: "@nzxt"
+      
       - name: Set up pnpm and install dependencies
         uses: pnpm/action-setup@v2.4.1
         with:
