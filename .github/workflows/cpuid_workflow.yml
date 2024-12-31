@@ -26,6 +26,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3  # Check out the repository to the runner
 
+      - name: Set up pnpm and install dependencies
+        uses: pnpm/action-setup@v2.4.1
+        with:
+          version: 8.2.0
+          run_install: fasle  # Automatically runs `pnpm install`
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_READ_TOKEN}}
+
       - name: Use Node.js v16
         uses: actions/setup-node@v3
         with:
@@ -35,14 +43,6 @@ jobs:
           scope: "@nzxt"
           cache: 'pnpm'
       
-      - name: Set up pnpm and install dependencies
-        uses: pnpm/action-setup@v2.4.1
-        with:
-          version: 8.2.0
-          run_install: true  # Automatically runs `pnpm install`
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_READ_TOKEN}}
-
       - name: Echo pnpm list and version
         run: |
           echo 'pnpm list'
